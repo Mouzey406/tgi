@@ -11,7 +11,7 @@ import Contact from "./routes/Contact";
 import DashBoard from "./routes/Dashboard";
 //route components
 import App from "./routes/Main";
-import SignUp from "./routes/SignUp";
+import SignUp from "./routes/SignUp-copy";
 
 
 const router = createBrowserRouter([

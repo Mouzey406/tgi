@@ -3,6 +3,7 @@ import { useReducer } from "react";
 import { useTheme } from '@mui/material/styles';
 import { Alert, Button, Link, Typography } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
+import TGI_FD from "../backendFunctions/axios";
 export default function LoginForm(props) {
     const muiTheme = useTheme();
     const [loggingIn, setLoggingIn] = useState({isLogginIn: false, hasError: false});
@@ -11,16 +12,13 @@ export default function LoginForm(props) {
         if(action.type=== "hello") alert("hello there!")
         else if(action.type === "mellow") alert("It's mellow!")
     }
-    const user = [{
-        name: "mozaski",
-        pass: "mozaskI"
-    }]
-    const [loginInfo, setLoginInfo] = useState({name: null, pass: null});
-    function checkLogin(e, props) {
+    const [loginInfo, setLoginInfo] = useState({userName: null, password: null});
+    async function checkLogin(e, props) {
         e.preventDefault();
         setLoggingIn({...loggingIn, isLogginIn: true});
-        let findUser = user.find(a=>a.name === loginInfo.name && a.pass === loginInfo.pass);
-        if(findUser) {
+        const checkUser = await TGI_FD.post("/user/account", loginInfo);
+        let response = checkUser.data;
+        if(response.wasSuccessful) {
             setTimeout(()=>{setLoggingIn({...loggingIn, isLogginIn: false});props.onLogin();}, 1000);
         }
         else {
@@ -36,11 +34,11 @@ export default function LoginForm(props) {
     <form onSubmit={(e)=>{checkLogin(e, props);dispatch("hello")}} autoComplete="off">
         <fieldset>
             <label htmlFor="userName">Username</label>
-            <input type="text" placeholder="" id="userName" onInput={(e)=>setLoginInfo({ ...loginInfo, name: e.target.value})} />
+            <input type="text" placeholder="" id="userName" onInput={(e)=>setLoginInfo({ ...loginInfo, userName: e.target.value})} />
         </fieldset>
         <fieldset>
             <label htmlFor="userPassword">Password</label>
-            <input type="password" id="userPassword" onInput={(e)=>setLoginInfo({ ...loginInfo, pass: e.target.value})} />
+            <input type="password" id="userPassword" onInput={(e)=>setLoginInfo({ ...loginInfo, password: e.target.value})} />
         </fieldset>
         <fieldset>
             <LoadingButton style={{display: "flex", width: "100%"}} loading={loggingIn.isLogginIn ? true : false} variant="contained" type="submit">All Done</LoadingButton>
