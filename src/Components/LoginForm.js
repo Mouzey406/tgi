@@ -18,7 +18,8 @@ export default function LoginForm(props) {
         setLoggingIn({...loggingIn, isLogginIn: true});
         const checkUser = await TGI_FD.post("/user/account", loginInfo);
         let response = checkUser.data;
-        if(response.wasSuccessful) {
+        console.log(response)
+        if(response.wasSuccessful && response.resultData.length > 0) {
             setTimeout(()=>{setLoggingIn({...loggingIn, isLogginIn: false});props.onLogin();}, 1000);
         }
         else {
