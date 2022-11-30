@@ -52,6 +52,7 @@ class App extends React.Component {
       }, 700);
     }, 700);
   }
+  
   render() {
     let theme = this.state.theme;
     return (
